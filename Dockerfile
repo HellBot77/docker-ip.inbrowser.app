@@ -10,10 +10,10 @@ FROM node:alpine AS build
 
 WORKDIR /ip.inbrowser.app
 COPY --from=base /git/ip.inbrowser.app .
-RUN npm install --global pnpm && \
-    pnpm install && \
+RUN npm install --global pnpm@9 && \
+    pnpm install --frozen-lockfile && \
     pnpm build
 
-FROM lipanski/docker-static-website
+FROM joseluisq/static-web-server
 
-COPY --from=build /ip.inbrowser.app/dist .
+COPY --from=build /ip.inbrowser.app/dist ./public
